@@ -36,12 +36,12 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 		List<EUTreeNode> resultList = new ArrayList<>();
 		for (TbContentCategory tbContentCategory : list) {
 			//创建一个节点
-			EUTreeNode node = new EUTreeNode();
-			node.setId(tbContentCategory.getId());
-			node.setText(tbContentCategory.getName());
-			node.setState(tbContentCategory.getIsParent()?"closed":"open");
-			
-			resultList.add(node);
+            EUTreeNode node = new EUTreeNode();
+            node.setId(tbContentCategory.getId());
+            node.setText(tbContentCategory.getName());
+            node.setState(tbContentCategory.getIsParent()?"closed":"open");
+
+            resultList.add(node);
 		}
 		return resultList;
 	}
@@ -71,5 +71,29 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 		//返回结果
 		return TaotaoResult.ok(contentCategory);
 	}
+
+    @Override
+    public TaotaoResult deleteByPrimaryKey(long id,long parentId) {
+	    contentCategoryMapper.deleteByPrimaryKey(id);
+	    TbContentCategoryExample example=new TbContentCategoryExample();
+	    Criteria criteria=example.createCriteria();
+	    criteria.andParentIdEqualTo(parentId);
+        List<TbContentCategory> list = contentCategoryMapper.selectByExample(example);
+        if(list.size()<1){
+            TbContentCategory parentCat = contentCategoryMapper.selectByPrimaryKey(parentId);
+            if(parentCat.getIsParent()) {
+                parentCat.setIsParent(false);
+                //更新父节点
+                contentCategoryMapper.updateByPrimaryKey(parentCat);
+            }
+        }
+        return TaotaoResult.ok();
+    }
+
+    @Override
+    public TaotaoResult updateByPrimaryKey(TbContentCategory tcc) {
+	    contentCategoryMapper.updateByPrimaryKeySelective(tcc);
+        return TaotaoResult.ok(tcc);
+    }
 
 }

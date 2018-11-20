@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.taotao.common.pojo.EUTreeNode;
 import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.pojo.TbContentCategory;
 
 public interface ContentCategoryService {
 
 	List<EUTreeNode> getCategoryList(long parentId);
 	TaotaoResult insertContentCategory(long parentId, String name);
+	TaotaoResult deleteByPrimaryKey(long id,long parentId);
+	TaotaoResult updateByPrimaryKey(TbContentCategory tcc);
 }

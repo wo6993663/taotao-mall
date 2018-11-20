@@ -38,7 +38,18 @@ $(function(){
         			}
         		});
         	}else{
-        		$.post("/content/category/update",{id:node.id,name:node.text});
+        		$.post("/content/category/update",{id:node.id,name:node.text},function(data){
+                    if(data.status == 200){
+                        $.messager.alert('提示','重命名'+node.text+' 成功!')
+                        _tree.tree("update",{
+                            target : node.target,
+                            id : data.data.id,
+                            text:data.data.name
+                        });
+                    }else{
+                        $.messager.alert('提示','重命名'+node.text+' 失败!');
+                    }
+                });
         	}
         }
 	});
@@ -46,6 +57,7 @@ $(function(){
 function menuHandler(item){
 	var tree = $("#contentCategory");
 	var node = tree.tree("getSelected");
+    //alert(node.id);
 	if(item.name === "add"){
 		tree.tree('append', {
             parent: (node?node.target:null),
@@ -60,10 +72,17 @@ function menuHandler(item){
 	}else if(item.name === "rename"){
 		tree.tree('beginEdit',node.target);
 	}else if(item.name === "delete"){
-		$.messager.confirm('确认','确定删除名为 '+node.text+' 的分类吗？',function(r){
+        var nodes = tree.tree('getParent',node.target);
+        //alert(nodes.id);
+        //alert(node.id);
+        $.messager.confirm('确认','确定删除名为 '+node.text+' 的分类吗？',function(r){
 			if(r){
-				$.post("/content/category/delete/",{parentId:node.parentId,id:node.id},function(){
-					tree.tree("remove",node.target);
+				$.post("/content/category/delete/",{id:node.id,parentId:nodes.id},function(data){
+                    if(data.status == 200){
+                        $.messager.alert('提示','删除'+node.text+' 成功!');
+                        tree.tree("remove",node.target);
+                    }
+
 				});	
 			}
 		});

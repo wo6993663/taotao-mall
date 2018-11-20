@@ -2,6 +2,7 @@ package com.taotao.controller;
 
 import java.util.List;
 
+import com.taotao.pojo.TbContentCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,18 @@ public class ContentCategoryController {
 	@ResponseBody
 	public TaotaoResult createContentCategory(Long parentId, String name) {
 		TaotaoResult result = contentCategoryService.insertContentCategory(parentId, name);
+		return result;
+	}
+	@RequestMapping("/delete")
+	@ResponseBody
+	public TaotaoResult deleteContentCategory(Long id,Long parentId) {
+		TaotaoResult result = contentCategoryService.deleteByPrimaryKey(id, parentId);
+		return result;
+	}
+	@RequestMapping("/update")
+	@ResponseBody
+	public TaotaoResult deleteContentCategory(TbContentCategory tcc) {
+		TaotaoResult result = contentCategoryService.updateByPrimaryKey(tcc);
 		return result;
 	}
 }
