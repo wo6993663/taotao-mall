@@ -43,13 +43,13 @@ public class ContentServiceImpl implements ContentService
 		contentMapper.insert(content);
 		
 		//添加缓存同步逻辑
-		try
+		/*try
 		{
 			HttpClientUtil.doGet(REST_BASE_URL + REST_CONTENT_SYNC_URL + content.getCategoryId());
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 		return TaotaoResult.ok();
 	}
 
@@ -65,9 +65,16 @@ public class ContentServiceImpl implements ContentService
 		EUDataGridResult result = new EUDataGridResult();
 		result.setRows(list);
 		//取记录总条数
-		PageInfo<TbContent> pageInfo = new PageInfo<>(list);
+		PageInfo<TbContent> pageInfo
+				= new PageInfo<>(list);
 		result.setTotal(pageInfo.getTotal());
 		return result;
+	}
+
+	@Override
+	public TaotaoResult deleteContent(long id) {
+		contentMapper.deleteByPrimaryKey(id);
+		return TaotaoResult.ok();
 	}
 
 }
