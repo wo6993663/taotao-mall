@@ -23,7 +23,8 @@ import com.taotao.service.ContentService;
  * <p>Description: </p>
  */
 @Service
-public class ContentServiceImpl implements ContentService {
+public class ContentServiceImpl implements ContentService
+{
 
 	@Autowired
 	private TbContentMapper  contentMapper;
@@ -34,24 +35,27 @@ public class ContentServiceImpl implements ContentService {
 	
 	
 	@Override
-	public TaotaoResult insertContent(TbContent content) {
+	public TaotaoResult insertContent(TbContent content)
+	{
 		//补全pojo内容
 		content.setCreated(new Date());
 		content.setUpdated(new Date());
 		contentMapper.insert(content);
 		
 		//添加缓存同步逻辑
-		try {
+		try
+		{
 			HttpClientUtil.doGet(REST_BASE_URL + REST_CONTENT_SYNC_URL + content.getCategoryId());
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
-		
 		return TaotaoResult.ok();
 	}
 
 	@Override
-	public EUDataGridResult getContentList(long categoryId, Integer page, Integer rows) {
+	public EUDataGridResult getContentList(long categoryId, Integer page, Integer rows)
+	{
 		TbContentExample example =new TbContentExample();
 		TbContentExample.Criteria criteria = example.createCriteria();
 		criteria.andCategoryIdEqualTo(categoryId);
