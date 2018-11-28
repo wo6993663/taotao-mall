@@ -43,13 +43,13 @@ public class ContentServiceImpl implements ContentService
 		contentMapper.insert(content);
 		
 		//添加缓存同步逻辑
-		/*try
+		try
 		{
 			HttpClientUtil.doGet(REST_BASE_URL + REST_CONTENT_SYNC_URL + content.getCategoryId());
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-		}*/
+		}
 		return TaotaoResult.ok();
 	}
 
@@ -73,7 +73,16 @@ public class ContentServiceImpl implements ContentService
 
 	@Override
 	public TaotaoResult deleteContent(long id) {
+		TbContent tc= contentMapper.selectByPrimaryKey(id);
 		contentMapper.deleteByPrimaryKey(id);
+		//添加缓存同步逻辑
+		try
+		{
+			HttpClientUtil.doGet(REST_BASE_URL + REST_CONTENT_SYNC_URL + tc.getCategoryId());
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		return TaotaoResult.ok();
 	}
 
