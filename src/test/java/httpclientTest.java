@@ -22,7 +22,7 @@ public class httpclientTest {
         CloseableHttpClient httpClient;
         httpClient = HttpClients.createDefault();
         //创建一个GET对象
-        HttpGet get = new HttpGet("http://www.baidu.com");
+        HttpGet get = new HttpGet("http://localhost:8081/rest/itemcat/list");
         //执行请求
         CloseableHttpResponse response = httpClient.execute(get);
         //取响应的结果
@@ -60,7 +60,7 @@ public class httpclientTest {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         //创建一个post对象
-        HttpPost post = new HttpPost("http://localhost:8082/httpclient/post.html");
+        HttpPost post = new HttpPost("http://localhost:8081/rest/itemcat/list");
         //执行post请求
         CloseableHttpResponse response = httpClient.execute(post);
         String string = EntityUtils.toString(response.getEntity());
